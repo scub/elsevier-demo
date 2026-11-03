@@ -1,0 +1,32 @@
+services:
+  floci:
+    image: floci/floci:latest-compat
+    security_opt:
+      - label=disable
+    ports:
+      - "4566:4566"
+      - "8888:80"
+    volumes:
+      - floci-data:/app/data
+      #- /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      FLOCI_RUN_AS_ROOT: "true"
+      FLOCI_HOSTNAME: floci
+      FLOCI_NETWORK_SECURITY_GROUP_ENFORCEMENT_ENABLED: "true"
+      FLOCI_SERVICES_UI_ENABLED: "true"
+      FLOCI_STORAGE_MODE: "persistent"
+      FLOCI_STORAGE_PERSISTENT_PATH: "/app/data"
+      FLOCI_SERVICES_EC2_MOCK: false
+      DOCKER_HOST: tcp://host.docker.internal:2375
+
+  #floci-ui:
+  #  image: floci/floci-ui:latest
+  #  ports:
+  #    - "4500:4500"
+  #  environment:
+  #    - FLOCI_ENDPOINT=http://floci:4566
+  #  depends_on:
+  #    - floci
+
+volumes:
+  floci-data:
