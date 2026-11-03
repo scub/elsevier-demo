@@ -5,14 +5,18 @@ locals {
       create_security_group = false
       security_groups       = [module.web_sg.id]
       subnet_id             = element(module.vpc.private_subnets, 0)
-      user_data             = file("${path.module}/files/webserver.userdata.sh")
+      user_data = templatefile("${path.module}/files/webserver.userdata.sh", {
+        asset_bucket = module.s3_bucket["web_assets"].s3_bucket_id
+      })
     },
     bastion = {
       instance_name               = "${local.name_prefix}bastion"
       associate_public_ip_address = true
       create_security_group       = true
       subnet_id                   = element(module.vpc.public_subnets, 0)
-      user_data                   = file("${path.module}/files/bastion.userdata.sh")
+      user_data = templatefile("${path.module}/files/bastion.userdata.sh", {
+        asset_bucket = module.s3_bucket["web_assets"].s3_bucket_id
+      })
       ingress_rules = {
         allow-http = {
           from_port   = 22
@@ -39,8 +43,8 @@ module "web_sg" {
 
   ingress_rules = {
     allow-bastion-http = {
-      from_port   = "8080"
-      to_port     = "8080"
+      from_port   = "8000"
+      to_port     = "8000"
       ip_protocol = "tcp"
       cidr_ipv4   = "${module.instances["bastion"].private_ip}/32"
     }
@@ -51,8 +55,6 @@ module "web_sg" {
       cidr_ipv4   = "${module.instances["bastion"].private_ip}/32"
     }
     deny-all = {
-      from_port   = "0"
-      to_port     = "65535"
       ip_protocol = "-1"
       cidr_ipv4   = "0.0.0.0/0"
     }
@@ -93,7 +95,6 @@ module "instances" {
     type       = "gp3"
     throughput = 200
     size       = 50
-
   }
 
   iam_role_description = "IAM role for EC2 instance ${local.name_prefix}${each.key}"

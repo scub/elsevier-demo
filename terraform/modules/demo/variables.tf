@@ -1,3 +1,5 @@
+data "aws_caller_identity" "current" {}
+
 variable "environment" {
   type    = string
   default = "dev"
@@ -10,7 +12,7 @@ variable "region" {
 
 variable "vpc_cidr" {
   type    = string
-  default = "10.0.0.0/8"
+  default = "10.0.0.0/16"
 }
 
 variable "personal_ip" {
@@ -19,12 +21,12 @@ variable "personal_ip" {
 
 variable "public_subnet_cidrs" {
   type    = list(string)
-  default = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
+  default = ["10.0.101.0/24", "10.0.102.0/24", "10.0.103.0/24"]
 }
 
 variable "private_subnet_cidrs" {
   type    = list(string)
-  default = ["10.0.101.0/24", "10.0.102.0/24", "10.0.103.0/24"]
+  default = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
 }
 
 variable "base_tags" {

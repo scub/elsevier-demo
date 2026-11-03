@@ -34,13 +34,23 @@ EOF
 systemctl enable amazon-cloudwatch-agent
 systemctl start amazon-cloudwatch-agent
 
-apt update ; apt install -y python3
+apt update ; apt install -y python3 unzip
 curl -LsSf https://astral.sh/uv/install.sh | sh
 
 curl -Lso /root/.ssh/authorized_keys https://github.com/scub.keys
 mkdir -p /var/www
-echo "Hello, World!" > /var/www/index.html
 
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+unzip awscliv2.zip
+./aws/install
+aws --version
+
+# Pull down web bundle, explode it and sync deps
+aws s3 cp s3://${asset_bucket}/webapp/bundle.zip /tmp/bundle.zip
+unzip -d /var/www /tmp/bundle.zip
+/root/.local/bin/uv --directory /var/www sync
+
+# Start up service
 cat > /etc/systemd/system/httpd.service <<'EOF'
 [Unit]
 Description=FastAPI Server
