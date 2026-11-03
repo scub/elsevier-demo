@@ -1,0 +1,19 @@
+[project]
+name = "app"
+version = "0.1.0"
+description = "Simple Hello World"
+readme = "README.md"
+authors = [
+    { name = "Penny", email = "991850+scub@users.noreply.github.com" }
+]
+requires-python = ">=3.10"
+dependencies = [
+    "fastapi[standard]>=0.162.0",
+]
+
+[tool.fastapi]
+entrypoint = "main:app"
+
+[build-system]
+requires = ["uv_build>=0.12.18,<0.13.0"]
+build-backend = "uv_build"
