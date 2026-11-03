@@ -1,0 +1,35 @@
+repos:
+  - repo: https://github.com/alessandrojcm/commitlint-pre-commit-hook
+    rev: v9.23.0
+    hooks:
+      - id: commitlint
+        stages: [commit-msg]
+        additional_dependencies: ['@commitlint/config-conventional']
+  - repo: https://github.com/terraform-docs/terraform-docs
+    rev: "v0.24.0"
+    hooks:
+      - id: terraform-docs-go
+        args: ["markdown", "table", "--output-file", "README.md", "--output-mode", "inject", "--recursive", "--recursive-path=modules", "--recursive-include-main=false", "terraform"]
+  - repo: https://github.com/gruntwork-io/pre-commit
+    rev: v0.1.30
+    hooks:
+      - id: tofu-fmt
+      - id: tofu-validate
+      - id: tflint
+      - id: shellcheck
+      - id: gofmt
+  - repo: local
+    hooks:
+      - id: staticcheck
+        name: staticcheck
+        entry: staticcheck ./...
+        language: system
+        types: [go]
+        pass_filenames: false
+      - id: terratest
+        name: terratest (plan against floci)
+        entry: go test -count=1 -timeout 10m ./test/...
+        language: system
+        files: (\.tf|\.tfvars|\.go|go\.mod|go\.sum)$
+        exclude: \.terraform\/.*$
+        pass_filenames: false

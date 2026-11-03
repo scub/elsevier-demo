@@ -1,0 +1,11 @@
+[tools]
+go = "1.27.3"
+opentofu = "1.13.2"
+awscli = "2.39.3"
+terraform-docs = "0.24.0"
+tflint = "0.65.0"
+pre-commit = "4.7.0"
+trivy = "0.76.1"
+terrascan = "1.19.9"
+infracost = "0.10.47"
+act = "0.2.94"
