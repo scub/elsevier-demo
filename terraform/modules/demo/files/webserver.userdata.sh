@@ -50,8 +50,10 @@ aws s3 cp s3://${asset_bucket}/webapp/bundle.zip /tmp/bundle.zip
 unzip -d /var/www /tmp/bundle.zip
 /root/.local/bin/uv --directory /var/www sync
 
+SECRET_VALUE=$(aws secretsmanager get-secret-value --secret-id /dev/webserver_secret --query "SecretString" --output text)
+
 # Start up service
-cat > /etc/systemd/system/httpd.service <<'EOF'
+cat > /etc/systemd/system/httpd.service <<EOF
 [Unit]
 Description=FastAPI Server
 After=network.target
@@ -60,6 +62,7 @@ After=network.target
 Type=simple
 ExecStart=/root/.local/bin/uv --directory /var/www run fastapi run
 Restart=on-failure
+Environment="SECRETSMANAGER_KEY=$SECRET_VALUE"
 
 [Install]
 WantedBy=multi-user.target

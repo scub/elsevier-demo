@@ -6,7 +6,8 @@ locals {
       security_groups       = [module.web_sg.id]
       subnet_id             = element(module.vpc.private_subnets, 0)
       user_data = templatefile("${path.module}/files/webserver.userdata.sh", {
-        asset_bucket = module.s3_bucket["web_assets"].s3_bucket_id
+        asset_bucket          = module.s3_bucket["web_assets"].s3_bucket_id,
+        secretsmanager_secret = module.secrets_manager.secret_arn,
       })
     },
     bastion = {
