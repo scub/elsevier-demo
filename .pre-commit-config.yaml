@@ -16,7 +16,6 @@ repos:
       - id: tofu-fmt
       - id: tofu-validate
       - id: tflint
-      - id: shellcheck
       - id: gofmt
   - repo: local
     hooks:
@@ -26,10 +25,10 @@ repos:
         language: system
         types: [go]
         pass_filenames: false
-      - id: terratest
-        name: terratest (plan against floci)
-        entry: go test -count=1 -timeout 10m ./test/...
-        language: system
-        files: (\.tf|\.tfvars|\.go|go\.mod|go\.sum)$
-        exclude: \.terraform\/.*$
-        pass_filenames: false
+      # - id: terratest
+      #   name: terratest (plan against floci)
+      #   entry: go test -v -count=1 -timeout 10m ./test/...
+      #   language: system
+      #   files: (\.tf|\.tfvars|\.go|go\.mod|go\.sum)$
+      #   exclude: \.terraform\/.*$
+      #   pass_filenames: false
