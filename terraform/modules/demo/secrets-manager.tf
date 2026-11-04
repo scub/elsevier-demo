@@ -19,10 +19,7 @@ resource "aws_iam_policy" "web_secretsmanager" {
     Version = "2012-10-17"
     Statement = [
       {
-        Action = [
-          "SecretsManager:ListSecrets",
-          "SecretsManager:GetSecretValue",
-        ]
+        Action   = ["SecretsManager:GetSecretValue"]
         Effect   = "Allow"
         Resource = module.secrets_manager.secret_arn
       }
