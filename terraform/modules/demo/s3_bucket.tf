@@ -5,18 +5,17 @@ locals {
       name       = "${replace(local.name_prefix, "_", "-")}assets-${data.aws_caller_identity.current.id}"
       versioning = false
       purpose    = "Application assets"
-
-      # lifecycle_rules = [{
-      #   id = "old_assets"
-      #   enabled = true
-      #   abort_incomplete_multipart_upload_days = null
-      #   expiration = [{
-      #     days                         = 30
-      #   }]
-      #   transition                    = []
-      #   noncurrent_version_transition = []
-      #   noncurrent_version_expiration = []
-      # }]
+      lifecycle_rules = [{
+        id                                     = "old_assets"
+        enabled                                = true
+        abort_incomplete_multipart_upload_days = null
+        expiration = [{
+          days = 30
+        }]
+        transition                    = []
+        noncurrent_version_transition = []
+        noncurrent_version_expiration = []
+      }]
     }
   }
 }
