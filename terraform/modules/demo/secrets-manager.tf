@@ -31,6 +31,6 @@ resource "aws_iam_policy" "web_secretsmanager" {
 }
 
 resource "aws_iam_role_policy_attachment" "web_access_secretsmanager" {
-  role       = module.instances["webserver"].iam_role_name
+  role       = module.autoscaling["webserver"].iam_role_name
   policy_arn = aws_iam_policy.web_secretsmanager.arn
 }

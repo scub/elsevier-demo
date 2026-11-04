@@ -7,14 +7,34 @@ module "alb" {
   subnets = module.vpc.public_subnets
 
   listeners = {
-    fixed_response = {
+    http_access = {
       port     = 80
       protocol = "HTTP"
 
-      fixed_response = {
-        content_type = "text/plain"
-        message_body = "Fixed message"
-        status_code  = "200"
+      forward = {
+        target_group_key = "webservers"
+      }
+    }
+  }
+
+  target_groups = {
+    webservers = {
+      name_prefix                       = "${replace(local.name_prefix, "_", "-")}web-"
+      protocol                          = "HTTP"
+      port                              = 8000
+      target_type                       = "instance"
+      deregistration_delay              = 10
+      load_balancing_cross_zone_enabled = true
+      create_attachment                 = false
+
+      health_check = {
+        enabled             = true
+        path                = "/"
+        port                = "traffic-port"
+        healthy_threshold   = 2
+        unhealthy_threshold = 3
+        interval            = 30
+        timeout             = 5
       }
     }
   }

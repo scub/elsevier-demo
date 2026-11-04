@@ -84,6 +84,6 @@ resource "aws_iam_policy" "access_asset_bucket" {
 }
 
 resource "aws_iam_role_policy_attachment" "webserver_access_asset_bucket" {
-  role       = module.instances["webserver"].iam_role_name
+  role       = module.autoscaling["webserver"].iam_role_name
   policy_arn = aws_iam_policy.access_asset_bucket.arn
 }
