@@ -66,10 +66,6 @@ module "web_sg" {
       ip_protocol = "tcp"
       cidr_ipv4   = "${module.instances["bastion"].private_ip}/32"
     }
-    deny-all = {
-      ip_protocol = "-1"
-      cidr_ipv4   = "0.0.0.0/0"
-    }
   }
 
   egress_rules = {

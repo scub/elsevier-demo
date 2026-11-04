@@ -1,0 +1,3 @@
+personal_ip = "127.0.0.1"
+environment = "dev"
+alerting_email = "penny@loves-to.dev"
