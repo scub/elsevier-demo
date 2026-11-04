@@ -21,6 +21,7 @@ jobs:
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-python@v3
+      - uses: jdx/mise-action@v5
       - uses: pre-commit/action@v3.0.1
 
   cost:
