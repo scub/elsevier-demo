@@ -9,3 +9,5 @@ trivy = "0.76.1"
 terrascan = "1.19.9"
 infracost = "0.10.47"
 act = "0.2.94"
+"go:honnef.co/go/tools/cmd/staticcheck" = "2026.2.2"
+
