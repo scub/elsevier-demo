@@ -11,8 +11,8 @@
 
 | Name | Version |
 | ---- | ------- |
-| <a name="provider_archive"></a> [archive](#provider\_archive) | 2.8.1 |
-| <a name="provider_aws"></a> [aws](#provider\_aws) | 6.71.0 |
+| <a name="provider_archive"></a> [archive](#provider\_archive) | ~> 2.8 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | ~> 6.71 |
 
 ## Modules
 
@@ -23,6 +23,7 @@
 | <a name="module_autoscaling"></a> [autoscaling](#module\_autoscaling) | terraform-aws-modules/autoscaling/aws | ~> 9.3 |
 | <a name="module_instances"></a> [instances](#module\_instances) | terraform-aws-modules/ec2-instance/aws | ~> 6.4 |
 | <a name="module_metric_alarm_cpu"></a> [metric\_alarm\_cpu](#module\_metric\_alarm\_cpu) | terraform-aws-modules/cloudwatch/aws//modules/metric-alarm | ~> 6.0 |
+| <a name="module_rds"></a> [rds](#module\_rds) | terraform-aws-modules/rds/aws | ~> 7.2 |
 | <a name="module_s3_buckets"></a> [s3\_buckets](#module\_s3\_buckets) | terraform-aws-modules/s3-bucket/aws | ~> 5.17 |
 | <a name="module_secrets_manager"></a> [secrets\_manager](#module\_secrets\_manager) | terraform-aws-modules/secrets-manager/aws | ~> 2.2 |
 | <a name="module_vpc"></a> [vpc](#module\_vpc) | terraform-aws-modules/vpc/aws | ~> 6.7 |
