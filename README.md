@@ -43,8 +43,15 @@ From there you can run `tofu init` and `tofu apply` respectively.
 ### Bootstrapping CI
 
 In order for CI to work as expected you'll need create an s3 bucket to hold our state, to do so
-you'll want to run a targeted apply for the state bucket, then migrate the local state to it:
+you'll want to run a targeted apply for the state bucket, take the value output for "state_bucket"
+and insert it into `providers.tf` and migrate the local state to it:
 
+
+```bash
+tofu init ; tofu apply -target=module.app_dev.module.s3_buckets["state_bucket"] --auto-approve
+sed -i -e "s|  bucket = \"\"|  bucket = \"$(tofu output -raw state_bucket)\"|; s|#||" providers.tf
+tofu init -migrate-state -force-copy
+```
 
 ## Additional information
 

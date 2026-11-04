@@ -1,10 +1,17 @@
 locals {
   buckets = {
     # alb_logs = { name = "${local.name_prefix}alb_logs_${data.aws_caller_identity.current.id}", versioning = false, purpose = "alb logs" },
+    state_bucket = {
+      name             = "${replace(local.name_prefix, "_", "-")}${var.state_bucket}-${data.aws_caller_identity.current.id}-${var.region}-an"
+      versioning       = true
+      purpose          = "Terraform State"
+      bucket_namespace = "account-regional"
+    }
     web_assets = {
-      name       = "${replace(local.name_prefix, "_", "-")}assets-${data.aws_caller_identity.current.id}"
-      versioning = false
-      purpose    = "Application assets"
+      name             = "${replace(local.name_prefix, "_", "-")}assets-${data.aws_caller_identity.current.id}-${var.region}-an"
+      versioning       = false
+      purpose          = "Application assets"
+      bucket_namespace = "account-regional"
       lifecycle_rules = [{
         id                                     = "old_assets"
         enabled                                = true
@@ -20,7 +27,7 @@ locals {
   }
 }
 
-module "s3_bucket" {
+module "s3_buckets" {
   source  = "terraform-aws-modules/s3-bucket/aws"
   version = "~> 5.17"
 
@@ -31,6 +38,8 @@ module "s3_bucket" {
 
   control_object_ownership = true
   object_ownership         = "ObjectWriter"
+
+  bucket_namespace = try(each.value.bucket_namespace, "")
 
   versioning = {
     enabled = each.value.versioning
@@ -58,7 +67,7 @@ data "archive_file" "webapp" {
 }
 
 resource "aws_s3_object" "webapp_bundle" {
-  bucket = module.s3_bucket["web_assets"].s3_bucket_id
+  bucket = module.s3_buckets["web_assets"].s3_bucket_id
   key    = "webapp/bundle.zip"
   source = data.archive_file.webapp.output_path
 
@@ -67,7 +76,7 @@ resource "aws_s3_object" "webapp_bundle" {
 }
 
 resource "aws_iam_policy" "access_asset_bucket" {
-  name        = "${module.s3_bucket["web_assets"].s3_bucket_id}-accessor"
+  name        = "${module.s3_buckets["web_assets"].s3_bucket_id}-accessor"
   description = "Access assets in the web bucket"
   policy = jsonencode({
     Version = "2012-10-17"
@@ -75,8 +84,8 @@ resource "aws_iam_policy" "access_asset_bucket" {
       Effect = "Allow"
       Action = ["s3:GetObject", "s3:HeadObject", "s3:ListObject", "s3:ListBucket"]
       Resource = [
-        module.s3_bucket["web_assets"].s3_bucket_arn,
-        "${module.s3_bucket["web_assets"].s3_bucket_arn}/*"
+        module.s3_buckets["web_assets"].s3_bucket_arn,
+        "${module.s3_buckets["web_assets"].s3_bucket_arn}/*"
       ]
     }]
   })

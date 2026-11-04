@@ -8,7 +8,7 @@ locals {
       security_groups       = [module.web_sg.id]
       subnets               = module.vpc.private_subnets
       user_data = templatefile("${path.module}/files/webserver.userdata.sh", {
-        asset_bucket          = module.s3_bucket["web_assets"].s3_bucket_id,
+        asset_bucket          = module.s3_buckets["web_assets"].s3_bucket_id,
         secretsmanager_secret = module.secrets_manager.secret_arn,
         asset_checksum        = filemd5(data.archive_file.webapp.output_path)
       })
@@ -21,7 +21,7 @@ locals {
       create_security_group       = true
       subnet_id                   = element(module.vpc.public_subnets, 0)
       user_data = templatefile("${path.module}/files/bastion.userdata.sh", {
-        asset_bucket = module.s3_bucket["web_assets"].s3_bucket_id
+        asset_bucket = module.s3_buckets["web_assets"].s3_bucket_id
       })
       ingress_rules = {
         allow-http = {

@@ -13,3 +13,9 @@ output "public_ip" {
     for k, v in local.instances : k => module.instances[k].public_ip
   }
 }
+
+output "buckets" {
+  value = {
+    for k, v in local.buckets : k => module.s3_buckets[k].s3_bucket_id
+  }
+}

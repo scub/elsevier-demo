@@ -1,4 +1,4 @@
-module "dev_app_deployment" {
+module "app_dev" {
   source = "../modules/demo"
 
   personal_ip    = var.personal_ip
@@ -7,5 +7,9 @@ module "dev_app_deployment" {
 }
 
 output "dns" {
-  value = module.dev_app_deployment.alb_dns
+  value = try(module.app_dev.alb_dns, "")
+}
+
+output "state_bucket" {
+  value = try(module.app_dev.buckets["state_bucket"], "")
 }

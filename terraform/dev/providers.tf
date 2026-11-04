@@ -11,7 +11,10 @@ terraform {
     }
   }
 
-  #backend "s3" {}
+  #  backend "s3" {
+  #    bucket = ""
+  #    key = "${var.environment}_${var.region}/terraform.tfstate"
+  #  }
 }
 
 provider "aws" {
