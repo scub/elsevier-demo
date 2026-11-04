@@ -57,7 +57,7 @@ module "s3_buckets" {
 data "archive_file" "webapp" {
   type        = "zip"
   source_dir  = "${path.module}/../../../app"
-  output_path = "/tmp/app.zip"
+  output_path = "app.zip"
 
   excludes = [
     "${path.module}/../../../app/.venv",

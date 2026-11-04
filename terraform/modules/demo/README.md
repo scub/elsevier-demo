@@ -64,6 +64,7 @@
 | ---- | ----------- |
 | <a name="output_alb_dns"></a> [alb\_dns](#output\_alb\_dns) | n/a |
 | <a name="output_buckets"></a> [buckets](#output\_buckets) | n/a |
+| <a name="output_github_actions_role"></a> [github\_actions\_role](#output\_github\_actions\_role) | n/a |
 | <a name="output_private_ip"></a> [private\_ip](#output\_private\_ip) | n/a |
 | <a name="output_public_ip"></a> [public\_ip](#output\_public\_ip) | n/a |
 <!-- END_TF_DOCS -->

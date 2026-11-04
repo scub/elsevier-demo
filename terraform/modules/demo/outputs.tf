@@ -19,3 +19,7 @@ output "buckets" {
     for k, v in local.buckets : k => module.s3_buckets[k].s3_bucket_id
   }
 }
+
+output "github_actions_role" {
+  value = aws_iam_role.github_actions.arn
+}
