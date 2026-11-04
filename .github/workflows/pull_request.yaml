@@ -6,6 +6,7 @@ on:
 
 permissions:
   contents: read
+  pull-requests: write
 
 defaults:
   run:
@@ -22,4 +23,24 @@ jobs:
       - uses: actions/setup-python@v3
       - uses: pre-commit/action@v3.0.1
 
-  
+  cost:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v7
+        if: github.event.action != 'closed'
+        with: 
+          path: head
+
+      - uses: actions/checkout@v7
+        if: github.event.action != 'closed'
+        with:
+          ref: ${{ github.event.pull_request.base.ref }}
+          path: base
+      
+      - uses: infracost/actions/diff@v5
+        with:
+          api-key: ${{ secrets.INFRACOST_API_KEY }}
+          base-path: base
+          head-path: head
+
