@@ -24,6 +24,7 @@ Configure security groups to:
   - Automate the deployment of the web server and application using Terraform provisioners, cloud-init, or a configuration management tool like Ansible.
 
 # Load Balancing and Auto Scaling:
+
   - Add an Application Load Balancer (ALB) in front of the web server.
   - Implement an Auto Scaling Group (ASG) with a minimum of 1 instance and a maximum of 3 instances, triggered by CPU usage.
 
@@ -43,6 +44,7 @@ Document any considerations taken to reduce costs or remain within limits.
 ## CI/CD Pipeline
 
 Implement a GitHub Actions or Jenkins pipeline to:
+
   - Validate Terraform code using terraform fmt and terraform validate.
   - Plan and apply Terraform code (manual approval step for apply).
   - Automate testing to ensure the web application is accessible via the ALB.

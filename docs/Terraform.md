@@ -16,6 +16,20 @@
 
 OpenTofu is used in place of Terraform
 
+## Bootstrap terraform
+
+Get a bucket online 
+
+```bash
+tofu init ; tofu apply -target="module.terraform_state_bucket"
+```
+
+Migrate state to it once created
+
+```bash
+tofu init -backend-config="bucket=$TF_BUCKET" -backend-config="key=$TF_ENV" -migrate-state
+```
+
 ## Upstream modules
 
 The following [terraform-aws-modules] community modules were used in this project:
