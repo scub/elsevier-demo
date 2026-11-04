@@ -43,15 +43,19 @@ From there you can run `tofu init` and `tofu apply` respectively.
 ### Bootstrapping CI
 
 In order for CI to work as expected you'll need create an s3 bucket to hold our state, to do so
-you'll want to run a targeted apply for the state bucket, take the value output for "state_bucket"
-and insert it into `providers.tf` and migrate the local state to it:
+you'll want to run a targeted apply for the state bucket and IAM role for Github Actions, take the
+value output for "state_bucket" and insert it into `providers.tf` and migrate the local state to it:
 
 
 ```bash
-tofu init ; tofu apply -target=module.app_dev.module.s3_buckets["state_bucket"] --auto-approve
+tofu init ; tofu apply -target='module.app_dev.module.s3_buckets["state_bucket"]' -target='module.app_dev.aws_iam_openid_connect_provider.github' -target='module.app_dev.aws_iam_role.github_actions' -target='module.app_dev.aws_iam_role_policy_attachment.terraform_admin' --auto-approve
 sed -i -e "s|  bucket = \"\"|  bucket = \"$(tofu output -raw state_bucket)\"|; s|#||" providers.tf
 tofu init -migrate-state -force-copy
 ```
+
+Take the `github_actions_role` output and add it to the pipeline variables as `AWS_ROLE_ARN_DEV`, making sure to add
+`PERSONAL_IP` and `ALERTING_EMAIL` variables. Once these 3 values are prepped, when the provider changes merge into
+`main` a full end to end apply run should occur.
 
 ## Additional information
 

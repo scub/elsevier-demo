@@ -21,7 +21,10 @@ resource "aws_iam_role" "github_actions" {
             "token.actions.githubusercontent.com:aud" = "sts.amazonaws.com"
           }
           StringLike = {
-            "token.actions.githubusercontent.com:sub" = "repo:scub/elsevier-demo:ref:refs/heads/main"
+            "token.actions.githubusercontent.com:sub" = [
+              "repo:scub@991850/elsevier-demo@1444304961:ref:refs/heads/main",
+              "repo:scub/elsevier-demo:ref:refs/heads/main"
+            ]
           }
         }
       }
@@ -36,15 +39,11 @@ locals {
   tf_object_arns = [for b in local.buckets : "arn:aws:s3:::${b.name}/*"]
 }
 
-# Least-privilege policy for the GitHub Actions role to plan/apply/destroy every resource in this module.
+# Least-privilege permissions for the GitHub Actions role to plan/apply/destroy every resource in this module.
 # Actions that do not support resource-level permissions are scoped to the deployment region instead.
-resource "aws_iam_policy" "terraform_deploy" {
-  name        = "github-actions-terraform-deploy"
-  description = "Least privilege permissions for GitHub Actions to apply the demo Terraform stack"
-
-  policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
+locals {
+  terraform_deploy_statements = {
+    compute = [
       {
         # VPC, subnets, IGW, NAT, EIP, route tables, security groups, launch templates, instances.
         # Most EC2 actions have no resource-level support, so restrict by region.
@@ -128,6 +127,8 @@ resource "aws_iam_policy" "terraform_deploy" {
           "arn:aws:elasticloadbalancing:${var.region}:${local.tf_account_id}:listener/app/${local.tf_dash_prefix}*/*/*",
         ]
       },
+    ]
+    iam = [
       {
         Sid    = "ServiceLinkedRoles"
         Effect = "Allow"
@@ -170,7 +171,7 @@ resource "aws_iam_policy" "terraform_deploy" {
               "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy",
               "arn:aws:iam::${local.tf_account_id}:policy/${local.name_prefix}*",
               "arn:aws:iam::${local.tf_account_id}:policy/${local.tf_dash_prefix}*",
-              "arn:aws:iam::${local.tf_account_id}:policy/github-actions-terraform-deploy",
+              "arn:aws:iam::${local.tf_account_id}:policy/github-actions-terraform-deploy-*",
             ]
           }
         }
@@ -195,7 +196,7 @@ resource "aws_iam_policy" "terraform_deploy" {
         Resource = [
           "arn:aws:iam::${local.tf_account_id}:policy/${local.name_prefix}*",
           "arn:aws:iam::${local.tf_account_id}:policy/${local.tf_dash_prefix}*",
-          "arn:aws:iam::${local.tf_account_id}:policy/github-actions-terraform-deploy",
+          "arn:aws:iam::${local.tf_account_id}:policy/github-actions-terraform-deploy-*",
         ]
       },
       {
@@ -218,6 +219,8 @@ resource "aws_iam_policy" "terraform_deploy" {
         ]
         Resource = aws_iam_openid_connect_provider.github.arn
       },
+    ]
+    data = [
       {
         Sid    = "S3Buckets"
         Effect = "Allow"
@@ -289,10 +292,24 @@ resource "aws_iam_policy" "terraform_deploy" {
         Resource = "*"
       },
     ]
+  }
+}
+
+resource "aws_iam_policy" "terraform_deploy" {
+  for_each = local.terraform_deploy_statements
+
+  name        = "github-actions-terraform-deploy-${each.key}"
+  description = "Least privilege (${each.key}) for GitHub Actions to apply the demo Terraform stack"
+
+  policy = jsonencode({
+    Version   = "2012-10-17"
+    Statement = each.value
   })
 }
 
 resource "aws_iam_role_policy_attachment" "terraform_admin" {
+  for_each = aws_iam_policy.terraform_deploy
+
   role       = aws_iam_role.github_actions.name
-  policy_arn = aws_iam_policy.terraform_deploy.arn
+  policy_arn = each.value.arn
 }
