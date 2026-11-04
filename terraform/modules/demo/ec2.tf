@@ -10,6 +10,7 @@ locals {
       user_data = templatefile("${path.module}/files/webserver.userdata.sh", {
         asset_bucket          = module.s3_bucket["web_assets"].s3_bucket_id,
         secretsmanager_secret = module.secrets_manager.secret_arn,
+        asset_checksum        = filemd5(data.archive_file.webapp.output_path)
       })
     }
   }
@@ -33,7 +34,6 @@ locals {
     }
   }
 }
-
 
 module "web_sg" {
   source  = "terraform-aws-modules/security-group/aws"
@@ -113,7 +113,6 @@ module "autoscaling" {
       traffic_source_identifier = module.alb.target_groups["webservers"].arn
     }
   }
-
 
   scaling_policies = {
     avg-cpu-policy-greater-than-50 = {

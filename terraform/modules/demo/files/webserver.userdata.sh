@@ -63,6 +63,9 @@ aws s3 cp s3://${asset_bucket}/webapp/bundle.zip /tmp/bundle.zip
 unzip -d /var/www /tmp/bundle.zip
 /root/.local/bin/uv --directory /var/www sync
 
+# Used to trigger redeploys when the app bundle updates
+echo ${asset_checksum} > /tmp/app_bundle_checksum
+
 SECRET_VALUE=$(aws secretsmanager get-secret-value --secret-id ${secretsmanager_secret} --query "SecretString" --output text)
 
 # Start up service
