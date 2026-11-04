@@ -14,4 +14,4 @@ The following is a list of improvements that should be made
 - The asset bucket lacks versioning, a real artifact storage solution should be used
 - EC2's should require the use of IMDSv2
 - Improve terratest coverage for module, run plan-only checks in pre-commit with full execution checks in CI
-- 
+- The role used by CI is overly permissive and needs to be scaled back
