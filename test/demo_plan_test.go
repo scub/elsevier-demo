@@ -1,14 +1,18 @@
 package test
 
 import (
-	// "os"
+	"path/filepath"
 	"testing"
-	"time"
-
-	http_helper "github.com/gruntwork-io/terratest/modules/http-helper"
+	// "os"
+	// "time"
 
 	"github.com/gruntwork-io/terratest/modules/terraform"
+	test_structure "github.com/gruntwork-io/terratest/modules/test-structure"
+	// "github.com/gruntwork-io/terratest/modules/aws"
+	// "github.com/gruntwork-io/terratest/modules/k8s"
+	// "github.com/gruntwork-io/terratest/modules/random"
 	// "github.com/stretchr/testify/assert"
+	// http_helper "github.com/gruntwork-io/terratest/modules/http-helper"
 )
 
 func TestTerraformDemoModule(t *testing.T) {
@@ -18,9 +22,9 @@ func TestTerraformDemoModule(t *testing.T) {
 	planFilePath := filepath.Join(moduleFolder, "plan.out")
 
 	terraformOptions := terraform.WithDefaultRetryableErrors(t, &terraform.Options{
-		TerraformDir: "../terraform/modules/demo/",
+		TerraformDir:    "../terraform/modules/demo/",
 		TerraformBinary: "tofu",
-		PlanFilePath: planFilePath,
+		PlanFilePath:    planFilePath,
 	})
 
 	// Run `terraform init`, `terraform plan`, and `terraform show` and fail the test if there are any errors
@@ -29,10 +33,10 @@ func TestTerraformDemoModule(t *testing.T) {
 	// introspect the plan values
 	terraform.RequirePlannedValuesMapKeyExists(t, plan, "module.instances[\"webserver\"].aws_instance.this[0]")
 
-	webSecurityGroupResource := plan.ResourcePlannedValuesMap["module.web_sg.aws_vpc_security_group_ingress_rule.this[\"allow-bastion-http\"]"]
+	// webSecurityGroupResource := plan.ResourcePlannedValuesMap["module.web_sg.aws_vpc_security_group_ingress_rule.this[\"allow-bastion-http\"]"]
 
-	ec2WebserverResource := plan.ResourcePlannedValuesMap["module.instances[\"webserver\"].aws_instance.this[0]"]
-	ec2Tags := ec2WebserverResource.AttributeValues["tags"].(map[string]interface{})
+	// ec2WebserverResource := plan.ResourcePlannedValuesMap["module.instances[\"webserver\"].aws_instance.this[0]"]
+	// ec2Tags := ec2WebserverResource.AttributeValues["tags"].(map[string]interface{})
 
 	// assert.Equal(t, map[string]interface{}{"Name": expectedName}, ec2Tags)
 
@@ -48,7 +52,6 @@ func TestTerraformDemoModule(t *testing.T) {
 	// output := terraform.OutputContext(t, t.Context(), terraformOptions, "hello_world")
 	// assert.Equal(t, "Hello, World!", output)
 }
-
 
 // // TestDemoEnvironmentPlan checks that the module initializes and plans cleanly
 // // against floci. It creates nothing, so it is cheap enough for pre-commit.

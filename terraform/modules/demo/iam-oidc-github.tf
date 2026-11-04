@@ -29,7 +29,7 @@ resource "aws_iam_role" "github_actions" {
   })
 }
 
-# Replace with a valid policy that adheres to least privilege
+# Use IAM access analyzer to replace with a valid policy that adheres to least privilege
 resource "aws_iam_role_policy_attachment" "terraform_admin" {
   role       = aws_iam_role.github_actions.name
   policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
