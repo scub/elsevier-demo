@@ -27,6 +27,19 @@ sudo cat <<EOF > /opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.js
       }
     }
   }
+  "metrics": {
+    "metrics_collected": {
+      "mem": {
+        "measurement": [
+          "mem_used_percent",
+          "mem_available_percent",
+          "mem_used",
+          "mem_available",
+          "mem_total"
+        ],
+      }
+    }
+  }
 }
 EOF
 
