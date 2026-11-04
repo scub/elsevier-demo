@@ -1,10 +1,7 @@
 # /// script
 # requires-python = ">=3.10"
 # dependencies = [
-#     "jinja2==3.1.6",
-#     "playwright==1.63.0",
-#     "pypdf==6.19.0",
-#     "python-docx==1.2.0",
+#     "fastapi[standard]>=0.162.0",
 # ]
 # ///
 from fastapi import FastAPI
