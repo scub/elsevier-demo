@@ -19,6 +19,10 @@ variable "personal_ip" {
   type = string
 }
 
+variable "alerting_email" {
+  type = string
+}
+
 variable "public_subnet_cidrs" {
   type    = list(string)
   default = ["10.0.101.0/24", "10.0.102.0/24", "10.0.103.0/24"]

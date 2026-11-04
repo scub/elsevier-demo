@@ -19,8 +19,10 @@
 | Name | Source | Version |
 | ---- | ------ | ------- |
 | <a name="module_alb"></a> [alb](#module\_alb) | terraform-aws-modules/alb/aws | ~> 10.5 |
+| <a name="module_alerting_sns_topic"></a> [alerting\_sns\_topic](#module\_alerting\_sns\_topic) | terraform-aws-modules/sns/aws | ~> 7.2 |
 | <a name="module_autoscaling"></a> [autoscaling](#module\_autoscaling) | terraform-aws-modules/autoscaling/aws | ~> 9.3 |
 | <a name="module_instances"></a> [instances](#module\_instances) | terraform-aws-modules/ec2-instance/aws | ~> 6.4 |
+| <a name="module_metric_alarm_cpu"></a> [metric\_alarm\_cpu](#module\_metric\_alarm\_cpu) | terraform-aws-modules/cloudwatch/aws//modules/metric-alarm | ~> 6.0 |
 | <a name="module_s3_bucket"></a> [s3\_bucket](#module\_s3\_bucket) | terraform-aws-modules/s3-bucket/aws | ~> 5.17 |
 | <a name="module_secrets_manager"></a> [secrets\_manager](#module\_secrets\_manager) | terraform-aws-modules/secrets-manager/aws | ~> 2.2 |
 | <a name="module_vpc"></a> [vpc](#module\_vpc) | terraform-aws-modules/vpc/aws | ~> 6.7 |
@@ -42,6 +44,7 @@
 
 | Name | Description | Type | Default | Required |
 | ---- | ----------- | ---- | ------- | :------: |
+| <a name="input_alerting_email"></a> [alerting\_email](#input\_alerting\_email) | n/a | `string` | n/a | yes |
 | <a name="input_base_tags"></a> [base\_tags](#input\_base\_tags) | n/a | `map(string)` | <pre>{<br/>  "managed-by": "terraform",<br/>  "project": "demo",<br/>  "scope": "elsevier",<br/>  "source": "https://github.com/scub/elsevier-demo/",<br/>  "user": "penny"<br/>}</pre> | no |
 | <a name="input_environment"></a> [environment](#input\_environment) | n/a | `string` | `"dev"` | no |
 | <a name="input_personal_ip"></a> [personal\_ip](#input\_personal\_ip) | n/a | `string` | n/a | yes |
