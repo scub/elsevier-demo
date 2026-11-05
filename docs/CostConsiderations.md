@@ -18,6 +18,6 @@
 ## Additional thoughts / considerations
 
 - Single NAT gateway
-- Lifecycle policy on S3 objects using Intelligent-Tiering
+- Lifecycle policies on S3 objects using Intelligent-Tiering
 - S3 should delete failed multi-part uploads
 - Integrate infracost into pre-commit/CI pull-request checks

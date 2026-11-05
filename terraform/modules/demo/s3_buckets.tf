@@ -41,6 +41,17 @@ module "s3_buckets" {
 
   bucket_namespace = try(each.value.bucket_namespace, "")
 
+  intelligent_tiering = {
+    # ARCHIVE_ACCESS min 90, DEEP_ARCHIVE_ACCESS min 180
+    archive_config = {
+      status = "Enabled"
+      tiering = {
+        ARCHIVE_ACCESS      = { days = 90 }
+        DEEP_ARCHIVE_ACCESS = { days = 180 }
+      }
+    }
+  }
+
   versioning = {
     enabled = each.value.versioning
   }
@@ -63,7 +74,6 @@ data "archive_file" "webapp" {
     "${path.module}/../../../app/.venv",
     "${path.module}/../../../app/__pycache__"
   ]
-
 }
 
 resource "aws_s3_object" "webapp_bundle" {
