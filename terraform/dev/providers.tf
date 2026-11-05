@@ -11,12 +11,12 @@ terraform {
     }
   }
 
-  backend "s3" {
-    bucket       = "d-tfstate-394711685791-us-east-1-an"
-    key          = "${var.environment}_${var.region}/terraform.tfstate"
-    region       = var.region
-    use_lockfile = true
-  }
+  # backend "s3" {
+  #   bucket       = ""
+  #   key          = "${var.environment}_${var.region}/terraform.tfstate"
+  #   region       = var.region
+  #   use_lockfile = true
+  # }
 }
 
 provider "aws" {
