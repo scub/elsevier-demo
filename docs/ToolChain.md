@@ -12,14 +12,15 @@
 
 # Tools used
 
-- [OpenTofu]
+- [act]
+- [conventional-commits]
 - [Floci]
 - [direnv]
-- [act]
+- [OpenTofu]
 - [pre-commit]
 - [tflint]
 - [terraform-docs]
-- [conventional-commits]
+- [terratest]
 
 ## Motivations
 
@@ -47,3 +48,8 @@ docker compose up -d
 cd .github/workflows && act
 ```
 
+[terratest] provides simple validation on terraform plans and ensures connectivity post apply
+
+```bash
+go test -v -count=1 -timeout 10m ./test/...
+```

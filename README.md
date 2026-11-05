@@ -16,6 +16,8 @@ This project uses [mise] to manage the local [tool chain](./docs/ToolChain.md), 
 mise install
 ```
 
+Once `mise install` completes, run `go mod tidy` to pull in `terratest`, which is needed for `pre-commit`.
+
 IaC is baked into a module in `./terraform/modules` and gets consumed per-environment (ex: `./terraform/dev`). 
 
 To use it add your AWS keys to `./terraform/dev/.envrc`, and copy `./terraform/dev/terraform.tfvars.example` to `./terraform/dev/terraform.tfvars` adding your IP and an Email to alert on.
