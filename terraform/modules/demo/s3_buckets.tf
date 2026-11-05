@@ -6,22 +6,35 @@ locals {
       versioning       = true
       purpose          = "Terraform State"
       bucket_namespace = "account-regional"
+      lifecycle_rules = [{
+        id      = "delete-older-state-versions"
+        enabled = true
+
+        filter = {}
+
+        # Keep the last 3 non-current objects, delete anything older after 7 days
+        noncurrent_version_expiration = {
+          noncurrent_days           = 7
+          newer_noncurrent_versions = 3
+        }
+      }]
     }
     web_assets = {
       name             = "${replace(local.name_prefix, "_", "-")}assets-${data.aws_caller_identity.current.id}-${var.region}-an"
-      versioning       = false
+      versioning       = true
       purpose          = "Application assets"
       bucket_namespace = "account-regional"
       lifecycle_rules = [{
-        id                                     = "old_assets"
-        enabled                                = true
-        abort_incomplete_multipart_upload_days = null
-        expiration = [{
-          days = 30
-        }]
-        transition                    = []
-        noncurrent_version_transition = []
-        noncurrent_version_expiration = []
+        id      = "delete-non-current-versions"
+        enabled = true
+
+        filter = {}
+
+        # Keep the last 3 non-current objects, delete anything older after 7 days
+        noncurrent_version_expiration = {
+          noncurrent_days           = 7
+          newer_noncurrent_versions = 3
+        }
       }]
     }
   }
@@ -40,6 +53,23 @@ module "s3_buckets" {
   object_ownership         = "ObjectWriter"
 
   bucket_namespace = try(each.value.bucket_namespace, "")
+
+  # Failed uploads are always cleaned up
+  lifecycle_rule = concat(
+    [
+      {
+        id      = "cleanup-failed-uploads"
+        enabled = true
+
+        # Target all objects
+        filter = {}
+
+        # Delete incomplete multipart uploads after 1 day
+        abort_incomplete_multipart_upload_days = 1
+      }
+    ],
+    try(each.value.lifecycle_rules, []),
+  )
 
   intelligent_tiering = {
     # ARCHIVE_ACCESS min 90, DEEP_ARCHIVE_ACCESS min 180

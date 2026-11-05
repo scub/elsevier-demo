@@ -16,3 +16,4 @@ The following is a list of improvements that should be made
 - EC2's should require the use of IMDSv2
 - Improve terratest coverage for module, converting them to terraform/tofu's native test suite where possible
 - The role used by CI can modify itself, leading to potential privilege escalations; this role should instead be vended by an administrative account rather than directly in this stack.
+- Bucket policies should be added to S3 to ensure access is restricted where necessary
